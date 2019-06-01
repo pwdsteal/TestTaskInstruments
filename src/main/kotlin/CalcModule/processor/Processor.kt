@@ -1,6 +1,8 @@
 package CalcModule.processor
 
 import CalcModule.model.Instrument
+import CalcModule.processor.statistic.Statistic
+import CalcModule.processor.statistic.SumOfNewest
 import java.util.concurrent.ConcurrentHashMap
 
 class Processor(config: Map<String, Statistic>) {
