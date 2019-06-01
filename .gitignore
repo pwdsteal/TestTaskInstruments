@@ -1,0 +1,10 @@
+#for ide idea
+.idea/
+out/
+*.iml
+*.iws
+*.bat
+*.log
+
+#maven
+target/
