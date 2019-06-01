@@ -18,10 +18,9 @@ class SumOfNewest(
 
     override val metricValue get() = queue.sumByDouble(Instrument::value)
 
-    override fun acquire(value: Instrument) {
-        synchronized(queue) {
-            queue.add(value)
-        }
+    @Synchronized
+    override fun acquire(instrument: Instrument) {
+        queue.add(instrument)
     }
 
     override fun toString(): String {

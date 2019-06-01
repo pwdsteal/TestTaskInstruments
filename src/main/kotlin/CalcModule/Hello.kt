@@ -2,6 +2,7 @@ package CalcModule
 
 import CalcModule.model.toInstrument
 import CalcModule.processor.Processor
+import CalcModule.processor.statistic.MaxValueStatistics
 import CalcModule.processor.statistic.SimpleStatistic
 import CalcModule.processor.statistic.StatisticOnDate
 import java.nio.file.Files
@@ -21,7 +22,8 @@ fun main(args: Array<String>) {
     val processor = Processor(
         mapOf(
             "INSTRUMENT1" to SimpleStatistic(),
-            "INSTRUMENT2" to StatisticOnDate(start..end)
+            "INSTRUMENT2" to StatisticOnDate(start..end),
+            "INSTRUMENT3" to MaxValueStatistics()
         )
     )
 

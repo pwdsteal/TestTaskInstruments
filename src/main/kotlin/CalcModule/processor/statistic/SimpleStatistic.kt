@@ -5,17 +5,15 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 open class SimpleStatistic : Statistic() {
-    private val lock = ReentrantLock()
     private var count = 0
     private var valueSum = 0.0
 
     override val metricValue get() = valueSum / count
 
+    @Synchronized
     override fun acquire(instrument: Instrument) {
-        lock.withLock {
-            valueSum += instrument.value
-            count++
-        }
+        valueSum += instrument.value
+        count++
     }
 
     override fun toString(): String {

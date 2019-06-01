@@ -16,8 +16,6 @@ class Processor(config: Map<String, Statistic>) {
     }
 
 
-
-
     enum class Metric {
         MEAN,
         SUM
