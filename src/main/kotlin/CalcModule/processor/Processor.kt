@@ -2,16 +2,34 @@ package CalcModule.processor
 
 import CalcModule.model.Instrument
 import CalcModule.processor.statistic.Statistic
-import CalcModule.processor.statistic.SumOfNewest
+import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.stream.Stream
+import kotlin.system.measureTimeMillis
 
-class Processor(config: Map<String, Statistic>) {
+class Processor(
+    config: Map<String, Statistic> = mapOf(),
+    val other: (() -> Statistic)? = null
+) {
 
     val data = ConcurrentHashMap(config)
 
-    fun process(instrument: Instrument) {
+    fun process(stream: Stream<Instrument>) {
+        val count = AtomicInteger()
+        val millis = measureTimeMillis {
+            stream
+                .peek { count.incrementAndGet() }
+                .parallel()
+                .forEach(this::processInstrument)
+        }
+        println("Scanned $count in ${Duration.ofMillis(millis)}")
+        println(data)
+    }
+
+    private fun processInstrument(instrument: Instrument) {
         // Insert newest statistic for unknown
-        data.computeIfAbsent(instrument.name) { SumOfNewest() }
+        other?.let { data.computeIfAbsent(instrument.name) { other.invoke() } }
         data[instrument.name]!!.acquire(instrument)
     }
 
