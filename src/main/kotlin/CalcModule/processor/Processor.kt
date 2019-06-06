@@ -24,7 +24,6 @@ class Processor(
                 .forEach(this::processInstrument)
         }
         println("Scanned $count in ${Duration.ofMillis(millis)}")
-        println(data)
     }
 
     private fun processInstrument(instrument: Instrument) {

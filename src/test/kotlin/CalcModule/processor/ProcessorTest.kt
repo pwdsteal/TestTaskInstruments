@@ -8,7 +8,11 @@ import CalcModule.processor.statistic.SumOfNewest
 import org.junit.Test
 import java.time.LocalDate
 import java.time.Month
+import java.util.function.Supplier
+import kotlin.random.Random
+import kotlin.streams.asStream
 import kotlin.test.assertEquals
+import kotlin.sequences.buildSequence as buildSequence1
 
 class ProcessorTest {
 
@@ -69,4 +73,27 @@ class ProcessorTest {
 
         assertEquals(processor.data[name]!!.metricValue, maxValue)
     }
+
+    @Test
+    fun `Test on 1 million records`() {
+        val items = 1_000_000L
+        val instrument = { Instrument("INSTRUMENT" + Random.nextLong(items / 10L), LocalDate.now(), 1.01) }
+        val sequence = generateSequence { instrument.invoke() }
+
+
+        val processor = Processor(
+            mapOf(
+                "INSTRUMENT1" to SimpleStatistic(),
+                "INSTRUMENT2" to StatisticOnDate(LocalDate.now()..LocalDate.now()),
+                "INSTRUMENT3" to MaxValueStatistics()
+            )
+        ) { SumOfNewest() }
+        processor.process(sequence.asStream().limit(items))
+
+        assertEquals(processor.data["INSTRUMENT1"]!!.metricValue, 1.01)
+        assertEquals(processor.data["INSTRUMENT2"]!!.metricValue, 1.01)
+        assertEquals(processor.data["INSTRUMENT3"]!!.metricValue, 1.01)
+    }
+
+
 }
