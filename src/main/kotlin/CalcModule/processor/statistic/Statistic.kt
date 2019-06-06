@@ -8,3 +8,4 @@ abstract class Statistic() {
     abstract fun acquire(instrument: Instrument)
 
 }
+

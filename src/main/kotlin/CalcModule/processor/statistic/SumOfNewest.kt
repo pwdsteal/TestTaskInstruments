@@ -6,6 +6,9 @@ import java.util.*
 import java.util.Comparator.comparing
 import kotlin.Comparator
 
+/**
+ * Сумма по N отфильтрованным продуктам
+ */
 class SumOfNewest(
     val maxEntries: Int = 10,
     val comparator: Comparator<Instrument> = comparing(Instrument::date).reversed()

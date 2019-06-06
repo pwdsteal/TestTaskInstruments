@@ -3,7 +3,10 @@ package CalcModule.processor.statistic
 import CalcModule.model.Instrument
 import java.time.LocalDate
 
-class StatisticOnDate(val closedRange: ClosedRange<LocalDate>) : SimpleStatistic() {
+/**
+ * Простая статистика с фильтром по дате
+ */
+class StatisticOnDate(metric: Metric, val closedRange: ClosedRange<LocalDate>) : SimpleStatistic(metric) {
     override fun acquire(instrument: Instrument) {
         if (instrument.date in closedRange) {
             super.acquire(instrument)

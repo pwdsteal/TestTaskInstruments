@@ -1,10 +1,7 @@
 package CalcModule.processor
 
 import CalcModule.model.Instrument
-import CalcModule.processor.statistic.MaxValueStatistics
-import CalcModule.processor.statistic.SimpleStatistic
-import CalcModule.processor.statistic.StatisticOnDate
-import CalcModule.processor.statistic.SumOfNewest
+import CalcModule.processor.statistic.*
 import org.junit.Test
 import java.time.LocalDate
 import java.time.Month
@@ -22,7 +19,7 @@ class ProcessorTest {
         val value = 1.0001
         val list = (1..10).map { Instrument(name, LocalDate.now(), value) }
 
-        val processor = Processor(mapOf(name to SimpleStatistic()))
+        val processor = Processor(mapOf(name to SimpleStatistic(Metric.MEAN)))
         processor.process(list.stream())
 
         assertEquals(processor.data[name]!!.metricValue, value)
@@ -41,7 +38,7 @@ class ProcessorTest {
         list.add(Instrument(name, start.minusDays(1), 0.0))
         list.add(Instrument(name, end.plusDays(1), 0.0))
 
-        val processor = Processor(mapOf(name to StatisticOnDate(start..end)))
+        val processor = Processor(mapOf(name to StatisticOnDate(Metric.MEAN, start..end)))
         processor.process(list.stream())
 
         assertEquals(processor.data[name]!!.metricValue, value)
@@ -83,8 +80,8 @@ class ProcessorTest {
 
         val processor = Processor(
             mapOf(
-                "INSTRUMENT1" to SimpleStatistic(),
-                "INSTRUMENT2" to StatisticOnDate(LocalDate.now()..LocalDate.now()),
+                "INSTRUMENT1" to SimpleStatistic(Metric.MEAN),
+                "INSTRUMENT2" to StatisticOnDate(Metric.MEAN, LocalDate.now()..LocalDate.now()),
                 "INSTRUMENT3" to MaxValueStatistics()
             )
         ) { SumOfNewest() }

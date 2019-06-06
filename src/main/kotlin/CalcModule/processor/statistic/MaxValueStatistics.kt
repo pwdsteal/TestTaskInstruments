@@ -2,6 +2,9 @@ package CalcModule.processor.statistic
 
 import CalcModule.model.Instrument
 
+/**
+ * Считает максимальное значение по продукту
+ */
 class MaxValueStatistics : Statistic() {
     var maxValue = 0.0
 

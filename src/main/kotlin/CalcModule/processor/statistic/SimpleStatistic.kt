@@ -4,11 +4,18 @@ import CalcModule.model.Instrument
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-open class SimpleStatistic : Statistic() {
+/**
+ * Простая статистика (Среднее, Сумма)
+ */
+open class SimpleStatistic(val metric: Metric) : Statistic() {
     private var count = 0
     private var valueSum = 0.0
 
-    override val metricValue get() = valueSum / count
+    override val metricValue
+        get() = when (metric) {
+            Metric.MEAN -> valueSum / count
+            Metric.SUM -> valueSum
+        }
 
     @Synchronized
     override fun acquire(instrument: Instrument) {

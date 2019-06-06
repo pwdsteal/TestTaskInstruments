@@ -8,6 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Stream
 import kotlin.system.measureTimeMillis
 
+/**
+ * Обходит стрим и считает статистику
+ */
 class Processor(
     config: Map<String, Statistic> = mapOf(),
     val other: (() -> Statistic)? = null
@@ -33,10 +36,6 @@ class Processor(
     }
 
 
-    enum class Metric {
-        MEAN,
-        SUM
-    }
 }
 
 
